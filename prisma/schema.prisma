@@ -10,11 +10,53 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model SprintCategory {
+  id String @id @default(uuid())
+  categoryName String
+  sprints       Sprint[]
+}
 
-    @@index([name])
+model Sprint {
+  id String @id @default(uuid())
+  sprintName String
+  repoLink String
+  lmsLink String
+  categoryID String
+  category SprintCategory @relation(fields: [categoryID], references: [id])
+  tasks Task[]
+}
+
+model Task {
+  id String @id @default(uuid())
+  taskName String
+  taskNumber Int
+  advanced Boolean @default(false)
+  sprintID String
+  sprint Sprint @relation(fields: [sprintID], references: [id], onDelete: Cascade) 
+  aspects Aspect[]
+}
+
+model Aspect {
+  id String @id @default(uuid())
+  taskID String
+  task Task @relation(fields: [taskID], references: [id], onDelete: Cascade)
+  description String @db.VarChar(200)
+  importance Importance
+  feedbacks Feedback[]
+}
+
+enum Importance {
+  must
+  should
+  could
+}
+
+model Feedback {
+  id String @id @default(uuid())
+  userID String @db.VarChar(128)
+  aspectID String @db.VarChar(128)
+  aspect Aspect @relation(fields: [aspectID], references: [id], onDelete: Cascade)
+  whatWentWell String
+  evenBetterIf String
+  public Boolean
 }
