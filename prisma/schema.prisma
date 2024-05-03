@@ -53,10 +53,17 @@ enum Importance {
 
 model Feedback {
   id String @id @default(uuid())
-  userID String @db.VarChar(128)
+  userID String? @db.VarChar(128)
   aspectID String @db.VarChar(128)
   aspect Aspect @relation(fields: [aspectID], references: [id], onDelete: Cascade)
   whatWentWell String
   evenBetterIf String
-  public Boolean
+  public Boolean @default(true)
+}
+
+model User {
+  id String @id @default(uuid())
+  admin Boolean @default(false)
+  email String @unique
+  name String
 }
