@@ -16,7 +16,7 @@ async function seed() {
     });
     await prisma.sprintCategory.create({
       data: {
-        categoryName: "Front End",
+        categoryName: "Front-End",
         sprints: {
           create: [
             {
@@ -53,6 +53,12 @@ async function seed() {
             },
           ],
         },
+      },
+    });
+
+    await prisma.sprintCategory.create({
+      data: {
+        categoryName: "Back-End",
       },
     });
 
